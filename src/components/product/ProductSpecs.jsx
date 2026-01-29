@@ -12,9 +12,6 @@ export default function ProductSpecs({ product }) {
 
         <div>Durability</div>
         <div>{product.durability}</div>
-
-        <div>Market</div>
-        <div>{product.market}</div>
       </div>
     </div>
   );

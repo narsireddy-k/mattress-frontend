@@ -1,38 +1,38 @@
 import { useState } from "react";
-import { explainRecommendation } from "../../services/explain.service";
+import { explainProduct } from "../../services/explain.service";
+import OrderFlowModal from "../order/OrderFlowModal";
 
-export default function ProductActions({ product, answers }) {
+export default function ProductActions({ product }) {
   const [loading, setLoading] = useState(false);
   const [explanation, setExplanation] = useState(null);
+  const [showOrderFlow, setShowOrderFlow] = useState(false);
 
   async function handleExplain() {
     setLoading(true);
     setExplanation(null);
 
-    const payload = {
-      product: [product],     // ✅ MUST BE ARRAY
-      user_answers: answers || {},
-    };
-
-    console.log(
-      "PRODUCT EXPLAIN PAYLOAD",
-      JSON.stringify(payload, null, 2)
-    );
-
     try {
-      const res = await explainRecommendation(payload);
+      const res = await explainProduct(product);
       setExplanation(res.explanation);
     } catch (err) {
+      console.error(err);
       setExplanation("Unable to explain this product right now 😕");
     } finally {
       setLoading(false);
     }
   }
 
+  function handleBuyNow() {
+    setShowOrderFlow(true);
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-4">
-        <button className="px-6 py-3 bg-blue-600 text-white rounded-lg">
+        <button
+          onClick={handleBuyNow}
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg"
+        >
           Buy Now
         </button>
 
@@ -46,9 +46,13 @@ export default function ProductActions({ product, answers }) {
       </div>
 
       {explanation && (
-        <div className="p-4 bg-gray-50 border rounded-lg text-sm">
+        <div className="p-4 bg-gray-50 border rounded-lg text-sm leading-relaxed">
           {explanation}
         </div>
+      )}
+
+      {showOrderFlow && (
+        <OrderFlowModal onClose={() => setShowOrderFlow(false)} />
       )}
     </div>
   );

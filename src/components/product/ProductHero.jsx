@@ -13,7 +13,7 @@ export default function ProductHero({ product }) {
 
         <div className="mt-6 text-xl font-semibold text-blue-600">
           {product.price?.min > 0
-            ? `₹${product.price.min} – ₹${product.price.max}`
+            ? `RM ${product.price.min} – ${product.price.max}`
             : "Price on request"}
         </div>
 

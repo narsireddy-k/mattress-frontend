@@ -1,6 +1,8 @@
-export function toSlug(text) {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
+export const ORDER_STEPS = [
+  "Customer Details",
+  "Payment",
+  "Order Placed & Inventory Check",
+  "Order Dispatched",
+  "Tracking & Updates",
+  "Delivery Completed",
+];
