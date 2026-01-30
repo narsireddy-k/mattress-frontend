@@ -15,9 +15,7 @@ export default function Navbar({ onStart }) {
           <Link to="/products" className="text-gray-600 hover:text-gray-900 transition">
             Products
           </Link>
-          <button className="text-gray-600 hover:text-gray-900 transition">
-            How it works
-          </button>
+          <Link to="/dashboard" className="text-gray-600 hover:text-gray-900 transition">Dashboard</Link>
           {onStart && (
             <button onClick={onStart} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
               Get Recommendation

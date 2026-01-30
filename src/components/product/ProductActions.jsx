@@ -1,22 +1,31 @@
 import { useState } from "react";
 import { explainProduct } from "../../services/explain.service";
 import OrderFlowModal from "../order/OrderFlowModal";
+import ExplainModal from "./ExplainModal";
 
 export default function ProductActions({ product }) {
   const [loading, setLoading] = useState(false);
-  const [explanation, setExplanation] = useState(null);
+  const [explanation, setExplanation] = useState([]);
   const [showOrderFlow, setShowOrderFlow] = useState(false);
+  const [showExplainModal, setShowExplainModal] = useState(false);
 
   async function handleExplain() {
     setLoading(true);
-    setExplanation(null);
+    setExplanation([]);
+    setShowExplainModal(true);
 
     try {
       const res = await explainProduct(product);
-      setExplanation(res.explanation);
+
+      const parsedExplanation = res.explanation
+        .split("\n")
+        .map((line) => line.replace(/^-\s*/, "").trim())
+        .filter((line) => line.length > 0);
+
+      setExplanation(parsedExplanation);
     } catch (err) {
       console.error(err);
-      setExplanation("Unable to explain this product right now 😕");
+      setExplanation(["Unable to explain this product right now 😕"]);
     } finally {
       setLoading(false);
     }
@@ -28,7 +37,8 @@ export default function ProductActions({ product }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex gap-4">
+      {/* 👇 RELATIVE CONTAINER IS CRITICAL */}
+      <div className="flex gap-4 relative">
         <button
           onClick={handleBuyNow}
           className="px-6 py-3 bg-blue-600 text-white rounded-lg"
@@ -38,18 +48,20 @@ export default function ProductActions({ product }) {
 
         <button
           onClick={handleExplain}
-          disabled={loading}
           className="px-6 py-3 bg-blue-100 text-blue-700 rounded-lg"
         >
-          {loading ? "Explaining..." : "Explain with AI 🤖"}
+          Explain with AI 🤖
         </button>
-      </div>
 
-      {explanation && (
-        <div className="p-4 bg-gray-50 border rounded-lg text-sm leading-relaxed">
-          {explanation}
-        </div>
-      )}
+        {/* 👇 Explain modal opens BESIDE the button */}
+        {showExplainModal && (
+          <ExplainModal
+            explanation={explanation}
+            loading={loading}
+            onClose={() => setShowExplainModal(false)}
+          />
+        )}
+      </div>
 
       {showOrderFlow && (
         <OrderFlowModal onClose={() => setShowOrderFlow(false)} />
