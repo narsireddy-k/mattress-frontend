@@ -7,7 +7,7 @@ export default function Navbar({ onStart }) {
 
         {/* Brand */}
         <Link to="/" className="text-xl font-bold text-gray-900 hover:opacity-80 transition">
-          Sleep<span className="text-blue-600">Smart</span>
+          Sleep<span className="text-blue-600">Tantrum</span>
         </Link>
 
         {/* Actions */}
